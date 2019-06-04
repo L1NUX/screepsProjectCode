@@ -6,7 +6,7 @@ var roleMiner = require('role.miner');
 
 module.exports.loop = function () {
         var spawn = Game.spawns['Spawn1'];
-        
+
         var energyContainers = spawn.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN);
@@ -16,7 +16,7 @@ module.exports.loop = function () {
 
         var totalEnergy = 0;
 
-        
+
         var sources = spawn.room.find(FIND_SOURCES);
 
         spawn.memory.availableSources = sources;
@@ -60,7 +60,7 @@ module.exports.loop = function () {
         if(miners < minMiners){
             spawn.spawnCreep(makeBody(totalEnergy, "miner"), "Miner" + Game.time, {memory: {role: "miner", source: spawn.memory.availableSources.pop()}});
         }else if(harvesters < minHarvesters){
-            spawn.spawnCreep(makeBody(totalEnergy, "harvester"), "Harvester" + Game.time, {memory: {role: "builder"}});
+            spawn.spawnCreep(makeBody(totalEnergy, "harvester"), "Harvester" + Game.time, {memory: {role: "harvester"}});
         }else if(defenders < minDefenders){
             spawn.spawnCreep(makeBody(totalEnergy, "defender"), "Defender" + Game.time, {memory: {role: "defender"}});
         }else if(upgraders < minUpgraders){
@@ -68,7 +68,7 @@ module.exports.loop = function () {
         }else if(builders < minBuilders){
             spawn.spawnCreep(makeBody(totalEnergy, "builder"), "Builder" + Game.time, {memory: {role: "builder"}});
         }
-    
+
 }
 
 /* @param var energy */
@@ -100,7 +100,7 @@ function makeBody(energy, type){
                 usedEnergy += 50;
             }
         }
-    }else if (type == "miner"){
+    }else if(type == "miner"){
         body.push(MOVE);
         for(var i = 0; i < (energy - 50); i += 50){
             if(work < 5){
