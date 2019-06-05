@@ -60,7 +60,7 @@ module.exports.loop = function () {
     }else if(harvesters < minHarvesters){
         spawn.spawnCreep(makeBody(totalEnergy, "harvester"), "Harvester" + Game.time, {memory: {role: "harvester"}});
     }else if(defenders < minDefenders){
-        spawn.spawnCreep(makeBody(totalEnergy, "defender"), "Defender" + Game.time, {memory: {role: "defender"}, {hIndex: Math.floor(Math.random() + 1)}});
+        spawn.spawnCreep(makeBody(totalEnergy, "defender"), "Defender" + Game.time, {memory: {role: "defender", hIndex: Math.floor(Math.random() + 1)}});
     }else if(upgraders < minUpgraders){
         spawn.spawnCreep(makeBody(totalEnergy, "upgrader"), "Upgrader" + Game.time, {memory: {role: "upgrader"}});
     }else if(builders < minBuilders){
