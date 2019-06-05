@@ -16,8 +16,11 @@ module.exports.loop = function () {
 
         var totalEnergy = 0;
 
-
         var sources = spawn.room.find(FIND_SOURCES);
+
+        for(var i = 0; i < energyContainers.length; i ++){
+            totalEnergy += energyContainers[i].energyCapacity;
+        }
 
         spawn.memory.availableSources = sources;
 
@@ -33,9 +36,7 @@ module.exports.loop = function () {
         var minHarvesters = miners * 5;
         var minMiners = sources.length;
 
-        for(var name in spawn.room.creeps){
-            var creep = spawn.room.creeps[name];
-
+        for(var creep in spawn.room.find(FIND_MY_CREEPS)){
             if(creep.memory.role == 'builder'){
                 builders ++;
                 roleBuilder.run(creep);
@@ -49,6 +50,7 @@ module.exports.loop = function () {
                 upgraders ++;
                 roleUpgrader.run(creep);
             }else if(creep.memory.role == 'miner'){
+                console.log("testing");
                 miners ++;
                 roleMiner.run(creep);
                 if(creep.ticksToLive == 1){
@@ -102,7 +104,7 @@ function makeBody(energy, type){
         }
     }else if(type == "miner"){
         body.push(MOVE);
-        for(var i = 0; i < (energy - 50); i += 50){
+        for(var i = 0; i + 100 < (energy - 50); i += 100){
             if(work < 5){
                 body.push(WORK);
                 work ++;
@@ -130,4 +132,6 @@ function makeBody(energy, type){
             }
         }
     }
+
+    return body;
 }
