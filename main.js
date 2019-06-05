@@ -67,7 +67,7 @@ module.exports.loop = function () {
         }else if(harvesters < minHarvesters){
             spawn.spawnCreep(makeBody(totalEnergy, "harvester"), "Harvester" + Game.time, {memory: {role: "harvester"}});
         }else if(defenders < minDefenders){
-            spawn.spawnCreep(makeBody(totalEnergy, "defender"), "Defender" + Game.time, {memory: {role: "defender"}});
+            spawn.spawnCreep(makeBody(totalEnergy, "defender"), "Defender" + Game.time, {memory: {role: "defender", hIndex: Math.floor(Math.random() + 1)}});
         }else if(upgraders < minUpgraders){
             spawn.spawnCreep(makeBody(totalEnergy, "upgrader"), "Upgrader" + Game.time, {memory: {role: "upgrader"}});
         }else if(builders < minBuilders){
@@ -107,6 +107,7 @@ function makeBody(energy, type){
         }
     }else if(type == "miner"){
         body.push(MOVE);
+        move ++;
         for(var i = 0; i + 100 < (energy - 50); i += 100){
             if(work < 5){
                 body.push(WORK);
