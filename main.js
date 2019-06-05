@@ -37,6 +37,9 @@ module.exports.loop = function () {
         var minMiners = sources.length;
 
         for(var creep in spawn.room.find(FIND_MY_CREEPS)){
+
+            console.log(creep);
+
             if(creep.memory.role == 'builder'){
                 builders ++;
                 roleBuilder.run(creep);
