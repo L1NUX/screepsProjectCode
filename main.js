@@ -8,6 +8,8 @@ var roleHealer = require('role.healer');
 module.exports.loop = function () {
     var spawn = Game.spawns['Spawn1'];
 
+    console.log("-" + spawn.memory.availableSources.length);
+
     var energyContainers = spawn.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN);
@@ -17,6 +19,8 @@ module.exports.loop = function () {
     var totalEnergy = 0;
 
     var sources = spawn.room.find(FIND_SOURCES);
+
+    console.log(sources.length);
 
     for(var i = 0; i < energyContainers.length; i ++){
         totalEnergy += energyContainers[i].energyCapacity;
@@ -65,11 +69,13 @@ module.exports.loop = function () {
     }
 
     if(miners == 0){
-        spawn.memory.availableSources = sources;
+        for(var i = 0; i < sources.length; i ++){
+            spawn.memory.availableSources[i] = sources[i];
+        }
         console.log("0 MINERS!");
     }
 
-    if(miners < minMiners){
+    if(miners < minMiners && spawn.energy == spawn.energyCapacity){
         spawn.spawnCreep(makeBody(totalEnergy, "miner"), "Miner" + Game.time, {memory: {role: "miner", source: spawn.memory.availableSources.pop()}});
     }else if(harvesters < minHarvesters){
         spawn.spawnCreep(makeBody(totalEnergy, "harvester"), "Harvester" + Game.time, {memory: {role: "harvester"}});
