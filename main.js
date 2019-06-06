@@ -100,79 +100,59 @@ function makeBody(energy, type){
     var heal = 0;
 
     if(type == "builder" || type == "upgrader"){
-        var availableEnergy = energy - usedEnergy;
-
-        while(usedEnergy < energy && energy - usedEnergy >= 50) {
-            availableEnergy = energy - usedEnergy;
-
-            if(work <= move && move == carry && availableEnergy >= 100){
+        for(var i = 0; i < energy; i += 50){
+            if(work <= move && move == carry && (energy - usedEnergy) >= 100){
                 body.push(WORK);
                 work ++;
                 usedEnergy += 100;
-            } else if(move <= carry && availableEnergy >= 50){
+            }else if(move <= carry && (energy - usedEnergy) >= 50){
                 body.push(MOVE);
                 move ++;
                 usedEnergy += 50;
-            } else if(availableEnergy >= 50){
+            }else if((energy - usedEnergy) >= 50){
                 body.push(CARRY);
                 carry ++;
                 usedEnergy += 50;
             }
         }
-    } else if(type == "miner"){
+    }else if(type == "miner"){
         body.push(MOVE);
         move ++;
         usedEnergy += 50;
-        
-        var availableEnergy = energy - usedEnergy;
-
-        while(usedEnergy < energy && availableEnergy >= 100) {
-            availableEnergy = energy - usedEnergy;
-
-            if(work < 5) {
+        for(var i = 0; i < (energy - 50); i += 50){
+            if(work < 5){
                 body.push(WORK);
                 work ++;
-                usedEnergy += 100;
+                usedEnergy += 50;
             }
         }
-    } else if(type == "defender"){
-        var availableEnergy = energy - usedEnergy;
-
-        while(usedEnergy < energy && availableEnergy >= 50) {
-            availableEnergy = energy - usedEnergy;
-
-            if(move < (attack / 2) && availableEnergy >= 50){
+    }else if(type == "defender"){
+        for(var i = 0; i < energy; i += 50){
+            if(move < (attack / 2) && (energy - usedEnergy) >= 50){
                 body.push(MOVE);
                 move ++;
                 usedEnergy += 50;
-            } else if(availableEnergy >= 80){
+            }else if((energy - usedEnergy) >= 80){
                 body.push(ATTACK);
                 attack ++;
                 usedEnergy += 80;
             }
         }
-    } else if(type == "harvester"){
-        var availableEnergy = energy - usedEnergy;
-        
-        while(usedEnergy < energy && availableEnergy >= 50) {
-            availableEnergy = energy - usedEnergy;
-
-            if(carry <= move && availableEnergy >= 50){
+    }
+    else if(type == "harvester"){
+        for(var i = 0; i < energy; i += 50){
+            if(carry <= move && (energy - usedEnergy) >= 50){
                 body.push(CARRY);
                 carry ++;
                 usedEnergy += 50;
-            } else if(availableEnergy >= 50){
+            }else if((energy - usedEnergy) >= 50){
                 body.push(MOVE);
                 move ++;
                 usedEnergy += 50;
             }
         }
     } else if(type == "healer") {
-        var availableEnergy = energy - usedEnergy;
-
-        while(usedEnergy < energy && availableEnergy >= 50) {
-            availableEnergy = energy - usedEnergy;
-
+        for(var i = 0; i < energy; i += 50) {
             if(move <= heal && availableEnergy >= 50) {
                 body.push(MOVE);
                 move ++;
