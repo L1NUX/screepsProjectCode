@@ -30,13 +30,6 @@ module.exports.loop = function () {
     var attackers = 0;
     var healers = 0;
 
-    var minBuilders = miners * 4;
-    var minDefenders = _.countBy(spawn.room.find(FIND_MY_CREEPS)) / 4;
-    var minUpgraders = miners * 3;
-    var minHarvesters = miners * 5;
-    var minMiners = sources.length;
-    var minHealers = Math.round(attackers / 3);
-
     for(var i in Game.creeps){
         var creep = Game.creeps[i];
 
@@ -63,6 +56,13 @@ module.exports.loop = function () {
             roleHealer.run(creep);
         }
     }
+
+    var minBuilders = miners * 4;
+    var minDefenders = _.countBy(spawn.room.find(FIND_MY_CREEPS)) / 4;
+    var minUpgraders = miners * 3;
+    var minHarvesters = miners * 5;
+    var minMiners = sources.length;
+    var minHealers = Math.round(attackers / 3);
 
     if(miners == 0){
         for(var i = 0; i < sources.length; i ++){
