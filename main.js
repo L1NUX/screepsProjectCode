@@ -3,6 +3,7 @@ var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleDefender = require('role.defender');
 var roleMiner = require('role.miner');
+var roleHealer = require('role.healer');
 
 module.exports.loop = function () {
     var spawn = Game.spawns['Spawn1'];
@@ -28,12 +29,15 @@ module.exports.loop = function () {
     var upgraders = 0;
     var harvesters = 0;
     var miners = 0;
+    var attackers = 0;
+    var healers = 0;
 
     var minBuilders = miners * 4;
     var minDefenders = _.countBy(spawn.room.find(FIND_MY_CREEPS)) / 4;
     var minUpgraders = miners * 3;
     var minHarvesters = miners * 5;
     var minMiners = sources.length;
+    var minHealers = Math.round(attackers / 3);
 
     for(var creep in spawn.room.find(FIND_MY_CREEPS)){
 
@@ -58,6 +62,9 @@ module.exports.loop = function () {
             if(creep.ticksToLive == 1){
                 spawn.memory.availableSources.push(creep.memory.source);
             }
+        }else if(creep.memory.role == 'healer') {
+            healers++;
+            roleHealer.run(creep);
         }
     }
 
@@ -71,6 +78,8 @@ module.exports.loop = function () {
         spawn.spawnCreep(makeBody(totalEnergy, "upgrader"), "Upgrader" + Game.time, {memory: {role: "upgrader"}});
     }else if(builders < minBuilders){
         spawn.spawnCreep(makeBody(totalEnergy, "builder"), "Builder" + Game.time, {memory: {role: "builder"}});
+    }else if(healers < minHealers) {
+        spawn.spawnCreep(makeBody(totalEnergy, "healer"), "Healer" + Game.time, {memory: {role: "healer"}});
     }
 }
 
@@ -85,6 +94,7 @@ function makeBody(energy, type){
     var move = 0;
     var carry = 0;
     var attack = 0;
+    var heal = 0;
 
     if(type == "builder" || type == "upgrader"){
         while(usedEnergy < energy) {
@@ -142,6 +152,20 @@ function makeBody(energy, type){
                 body.push(MOVE);
                 move ++;
                 usedEnergy += 50;
+            }
+        }
+    }else if(type == "healer") {
+        while(usedEnergy < energy) {
+            var availableEnergy = energy - usedEnergy;
+
+            if(move <= heal && availableEnergy >= 50) {
+                body.push(MOVE);
+                move ++;
+                usedEnergy += 50;
+            } else if(availableEnergy >= 250) {
+                body.push(HEAL);
+                heal ++;
+                usedEnergy += 250;
             }
         }
     }

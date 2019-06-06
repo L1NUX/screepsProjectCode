@@ -10,7 +10,7 @@ var roleDefender = {
             }
         } else if(targets2 && creep.memory.tIndex == 2) {
             if(creep.attack(targets2[0]) == ERR_NOT_IN_RANGE){
-                creep.moveTo(targets2[0], {visualizePathStyle: {stroke: '#42f448'}});
+                creep.moveTo(targets2[0], {visualizePathStyle: {stroke: '#1000ff'}});
             }
         } else{
             creep.moveTo(creep.room.find(FIND_STRUCTURE_SPAWN)[0]);
