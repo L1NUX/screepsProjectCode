@@ -22,8 +22,6 @@ module.exports.loop = function () {
         totalEnergy += energyContainers[i].energyCapacity;
     }
 
-    spawn.memory.availableSources = sources;
-
     var builders = 0;
     var defenders = 0;
     var upgraders = 0;
@@ -64,6 +62,11 @@ module.exports.loop = function () {
             healers++;
             roleHealer.run(creep);
         }
+    }
+
+    if(miners == 0){
+        spawn.memory.availableSources = sources;
+        console.log("0 MINERS!");
     }
 
     if(miners < minMiners){
