@@ -3,9 +3,8 @@ var roleMiner = {
     /** @param {Creep} creep **/
     run: function(creep) {
         var sources = creep.room.find(FIND_SOURCES);
-        console.log("test");
-        if(creep.harvest(sources[creep.memory.source]) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(sources[creep.memory.source], {visualizePathStyle: {stroke: '#ffaa00'}});
+        if(creep.harvest(Game.getObjectById(creep.memory.source.id)) == -9) {
+            creep.moveTo(Game.getObjectById(creep.memory.source.id), {visualizePathStyle: {stroke: '#ffaa00'}});
         }
 	}
 };

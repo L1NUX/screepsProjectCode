@@ -39,9 +39,8 @@ module.exports.loop = function () {
     var minMiners = sources.length;
     var minHealers = Math.round(attackers / 3);
 
-    for(var creep in spawn.room.find(FIND_MY_CREEPS)){
-
-        console.log(creep);
+    for(var i in Game.creeps){
+        var creep = Game.creeps[i];
 
         if(creep.memory.role == 'builder'){
             builders ++;
@@ -56,7 +55,6 @@ module.exports.loop = function () {
             upgraders ++;
             roleUpgrader.run(creep);
         }else if(creep.memory.role == 'miner'){
-            console.log("testing");
             miners ++;
             roleMiner.run(creep);
             if(creep.ticksToLive == 1){
