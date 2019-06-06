@@ -112,6 +112,8 @@ function makeBody(energy, type){
                 body.push(CARRY);
                 carry ++;
                 usedEnergy += 50;
+            }else{
+                usedEnergy = energy;
             }
         }
     }else if(type == "miner"){
@@ -124,6 +126,8 @@ function makeBody(energy, type){
                 body.push(WORK);
                 work ++;
                 usedEnergy += 100;
+            }else{
+                usedEnergy = energy;
             }
         }
     }else if(type == "defender"){
@@ -139,6 +143,9 @@ function makeBody(energy, type){
                 attack ++;
                 usedEnergy += 80;
             }
+            else{
+                usedEnergy = energy;
+            }
         }
     }else if(type == "harvester"){
         while(usedEnergy < energy) {
@@ -152,6 +159,8 @@ function makeBody(energy, type){
                 body.push(MOVE);
                 move ++;
                 usedEnergy += 50;
+            }else{
+                usedEnergy = energy;
             }
         }
     }else if(type == "healer") {
@@ -166,6 +175,8 @@ function makeBody(energy, type){
                 body.push(HEAL);
                 heal ++;
                 usedEnergy += 250;
+            }else{
+                usedEnergy = energy;
             }
         }
     }
