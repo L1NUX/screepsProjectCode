@@ -18,7 +18,12 @@ module.exports.loop = function () {
 
     var sources = spawn.room.find(FIND_SOURCES);
 
-    for(var container in energyContainers){
+    var container;
+
+    for(var i = 0; i < energyContainers.length; i ++){
+
+        container = energyContainers[i];
+
         totalEnergy += container.energyCapacity;
     }
 
@@ -88,7 +93,6 @@ module.exports.loop = function () {
 
 /* @param var energy, type */
 function makeBody(energy, type){
-
     var body = [];
 
     var usedEnergy = 0;
@@ -119,11 +123,12 @@ function makeBody(energy, type){
         body.push(MOVE);
         move ++;
         usedEnergy += 50;
-        for(var i = 0; i < (energy - 50); i += 50){
+        for(var i = 0; i < energy - usedEnergy; i += 100){
+            console.log("work--");
             if(work < 5){
                 body.push(WORK);
                 work ++;
-                usedEnergy += 50;
+                usedEnergy += 100;
             }
         }
     }else if(type == "defender"){
