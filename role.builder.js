@@ -38,7 +38,7 @@ var roleBuilder = {
             var sources = creep.room.find(FIND_DROPPED_ENERGY);
 
             if(creep.pickup(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.pickup(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
             }
 	    }
 	}
