@@ -8,8 +8,6 @@ var roleHealer = require('role.healer');
 module.exports.loop = function () {
     var spawn = Game.spawns['Spawn1'];
 
-    console.log("-" + spawn.memory.availableSources.length);
-
     var energyContainers = spawn.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN);
