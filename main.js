@@ -124,7 +124,6 @@ function makeBody(energy, type){
         move ++;
         usedEnergy += 50;
         for(var i = 0; i < energy - usedEnergy; i += 100){
-            console.log("work--");
             if(work < 5){
                 body.push(WORK);
                 work ++;
