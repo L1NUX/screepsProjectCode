@@ -99,9 +99,11 @@ module.exports.loop = function () {
     var minDefenders = (spawn.room.find(FIND_MY_CREEPS).length - defenders) / 2;
     var minUpgraders = minMiners * 3  * (spawn.room.controller.level / 1.5);
     var minHarvesters = minMiners * 4  * (spawn.room.controller.level / 1.5);
-    var minHealers = Math.round(attackers / 3);
+    var minHealers = Math.round(attackers / 2);
 
     var display = false;
+
+    //totalEnergy = 300;
 
     //--- Uncomment to enable information display every tick (useful for debugging) ---
     //display = true;
