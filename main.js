@@ -15,6 +15,7 @@ module.exports.loop = function () {
     });
 
     var totalEnergy = 0;
+    var currentEnergy = 0;
 
     var sources = spawn.room.find(FIND_SOURCES);
 
@@ -25,6 +26,7 @@ module.exports.loop = function () {
         container = energyContainers[i];
 
         totalEnergy += container.energyCapacity;
+        currentEnergy += container.energy;
     }
 
     var builders = 0;
@@ -63,7 +65,7 @@ module.exports.loop = function () {
     }
 
     var minBuilders = miners * 4 * spawn.room.controller.level;
-    var minDefenders = spawn.room.find(FIND_MY_CREEPS).length - defenders;
+    var minDefenders = (spawn.room.find(FIND_MY_CREEPS).length - defenders) / 2;
     var minUpgraders = miners * 3  * spawn.room.controller.level;
     var minHarvesters = miners * 4  * spawn.room.controller.level;
     var minMiners = sources.length;
@@ -111,22 +113,25 @@ module.exports.loop = function () {
     console.log("+++++++++++");
     console.log();
     console.log("Max Energy: " + totalEnergy);
+    console.log("Current Energy: " + currentEnergy);
     console.log("=======================");
 
-    if(miners < minMiners && spawn.energy == spawn.energyCapacity){
-        spawn.spawnCreep(makeBody(totalEnergy, "miner"), "Miner" + Game.time, {memory: {role: "miner", source: spawn.memory.availableSources.pop()}});
-    }if(healers < minHealers && attackers > 0){
-        spawn.spawnCreep(makeBody(totalEnergy, "healer"), "Healer" + Game.time, {memory: {role: "healer"}});
-    } else if(harvesters < minHarvesters){
-        spawn.spawnCreep(makeBody(totalEnergy, "harvester"), "Harvester" + Game.time, {memory: {role: "harvester"}});
-    } else if(defenders < minDefenders){
-        spawn.spawnCreep(makeBody(totalEnergy, "defender"), "Defender" + Game.time, {memory: {role: "defender", tIndex: Math.round(Math.random() + 1)}});
-    } else if(upgraders < minUpgraders){
-        spawn.spawnCreep(makeBody(totalEnergy, "upgrader"), "Upgrader" + Game.time, {memory: {role: "upgrader"}});
-    } else if(builders < minBuilders){
-        spawn.spawnCreep(makeBody(totalEnergy, "builder"), "Builder" + Game.time, {memory: {role: "builder"}});
-    } else if(healers < minHealers) {
-        spawn.spawnCreep(makeBody(totalEnergy, "healer"), "Healer" + Game.time, {memory: {role: "healer"}});
+    if(currentEnergy == totalEnergy){
+        if(miners < minMiners && spawn.energy == spawn.energyCapacity){
+            spawn.spawnCreep(makeBody(totalEnergy, "miner"), "Miner" + Game.time, {memory: {role: "miner", source: spawn.memory.availableSources.pop()}});
+        }if(healers < minHealers && attackers > 0){
+            spawn.spawnCreep(makeBody(totalEnergy, "healer"), "Healer" + Game.time, {memory: {role: "healer"}});
+        } else if(harvesters < minHarvesters){
+            spawn.spawnCreep(makeBody(totalEnergy, "harvester"), "Harvester" + Game.time, {memory: {role: "harvester"}});
+        } else if(defenders < minDefenders){
+            spawn.spawnCreep(makeBody(totalEnergy, "defender"), "Defender" + Game.time, {memory: {role: "defender", tIndex: Math.round(Math.random() + 1)}});
+        } else if(upgraders < minUpgraders){
+            spawn.spawnCreep(makeBody(totalEnergy, "upgrader"), "Upgrader" + Game.time, {memory: {role: "upgrader"}});
+        } else if(builders < minBuilders){
+            spawn.spawnCreep(makeBody(totalEnergy, "builder"), "Builder" + Game.time, {memory: {role: "builder"}});
+        } else if(healers < minHealers) {
+            spawn.spawnCreep(makeBody(totalEnergy, "healer"), "Healer" + Game.time, {memory: {role: "healer"}});
+        }
     }
 }
 
