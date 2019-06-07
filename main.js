@@ -62,12 +62,12 @@ module.exports.loop = function () {
         }
     }
 
-    var minBuilders = miners * 4;
-    var minDefenders = _.countBy(spawn.room.find(FIND_MY_CREEPS)) / 4;
-    var minUpgraders = miners * 3;
-    var minHarvesters = miners * 5;
+    var minBuilders = miners * 4 * spawn.room.controller.level;
+    var minDefenders = _.countBy(spawn.room.find(FIND_MY_CREEPS)) / 4  * spawn.room.controller.level;
+    var minUpgraders = miners * 3  * spawn.room.controller.level;
+    var minHarvesters = miners * 5  * spawn.room.controller.level;
     var minMiners = sources.length;
-    var minHealers = Math.round(attackers / 3);
+    var minHealers = Math.round(attackers / 3)  * spawn.room.controller.level;
 
     if(miners == 0){
         for(var i = 0; i < sources.length; i ++){
