@@ -76,7 +76,7 @@ module.exports.loop = function () {
             var creep = Game.creeps[i];
             var role = creep.memory.role;
 
-            var droppedEnergy = creep.room.find(FIND_DROPPED_ENERGY);
+            var droppedEnergy = creep.room.find(FIND_DROPPED_RESOURCES);
 
             if(role == 'harvester' || role == 'builder' || role == 'upgrader') {
                 if(creep.carry[RESOURCE_ENERGY] > creep.carryCapacity) {
@@ -84,7 +84,7 @@ module.exports.loop = function () {
                         creep.moveTo(Game.spawns['Spawn1']);
                         console.log('Returning to spawn...');
                     }
-                }else{
+                } else {
                     if(creep.pickup(droppedEnergy[0]) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(droppedEnergy[0], {visualizePathStyle: {stroke: '#ffaa00'}});
                     }
@@ -203,17 +203,17 @@ function makeBody(energy, type) {
                 body.push(WORK);
                 work ++;
                 usedEnergy += 100;
-            }else if(move <= carry && (energy - usedEnergy) >= 50) {
+            } else if(move <= carry && (energy - usedEnergy) >= 50) {
                 body.push(MOVE);
                 move ++;
                 usedEnergy += 50;
-            }else if((energy - usedEnergy) >= 50) {
+            } else if((energy - usedEnergy) >= 50) {
                 body.push(CARRY);
                 carry ++;
                 usedEnergy += 50;
             }
         }
-    }else if(type == "miner") {
+    } else if(type == "miner") {
         body.push(MOVE);
         move ++;
         usedEnergy += 50;
@@ -225,26 +225,25 @@ function makeBody(energy, type) {
                 usedEnergy += 100;
             }
         }
-    }else if(type == "defender") {
+    } else if(type == "defender") {
         while(energy - usedEnergy >= 50) {
-            if(move < (attack / 2) && (energy - usedEnergy) >= 50) {
+            if(move < (attack / 2)) {
                 body.push(MOVE);
                 move ++;
                 usedEnergy += 50;
-            }else if((energy - usedEnergy) >= 80) {
+            } else if((energy - usedEnergy) >= 80) {
                 body.push(ATTACK);
                 attack ++;
                 usedEnergy += 80;
             }
         }
-    }
-    else if(type == "harvester") {
+    } else if(type == "harvester") {
         while(energy - usedEnergy >= 50) {
             if(carry <= move) {
                 body.push(CARRY);
                 carry ++;
                 usedEnergy += 50;
-            }else {
+            } else {
                 body.push(MOVE);
                 move ++;
                 usedEnergy += 50;
