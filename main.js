@@ -63,9 +63,9 @@ module.exports.loop = function () {
     }
 
     var minBuilders = miners * 4 * spawn.room.controller.level;
-    var minDefenders = _.countBy(spawn.room.find(FIND_MY_CREEPS)) / 4  * spawn.room.controller.level;
+    var minDefenders = spawn.room.find(FIND_MY_CREEPS).length;
     var minUpgraders = miners * 3  * spawn.room.controller.level;
-    var minHarvesters = miners * 5  * spawn.room.controller.level;
+    var minHarvesters = miners * 4  * spawn.room.controller.level;
     var minMiners = sources.length;
     var minHealers = Math.round(attackers / 3)  * spawn.room.controller.level;
 
@@ -75,6 +75,31 @@ module.exports.loop = function () {
         }
         console.log("0 MINERS!");
     }
+
+    console.log("=======================");
+    console.log("     *Information*");
+    console.log("+++++++++++");
+    console.log("Minimum Miners: " + minMiners);
+    console.log("Current Miners: " + miners);
+    console.log("-----------");
+    console.log("Minimum Harvesters: " + minHarvesters);
+    console.log("Current Harvesters: " + harvesters);
+    console.log("-----------");
+    console.log("Minimum Defenders: " + minDefenders);
+    console.log("Current Defenders: " + defenders);
+    console.log("-----------");
+    console.log("Minimum Upgraders: " + minUpgraders);
+    console.log("Current Upgraders: " + upgraders);
+    console.log("-----------");
+    console.log("Minimum Builders: " + minBuilders);
+    console.log("Current Builders: " + builders);
+    console.log("-----------");
+    console.log("Minimum Healers: " + minHealers);
+    console.log("Current Healers: " + healers);
+    console.log("+++++++++++");
+    console.log();
+    console.log("Max Energy: " + totalEnergy);
+    console.log("=======================");
 
     if(miners < minMiners && spawn.energy == spawn.energyCapacity){
         spawn.spawnCreep(makeBody(totalEnergy, "miner"), "Miner" + Game.time, {memory: {role: "miner", source: spawn.memory.availableSources.pop()}});
