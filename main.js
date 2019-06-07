@@ -8,6 +8,11 @@ var roleHealer = require('role.healer');
 module.exports.loop = function () {
     var spawn = Game.spawns['Spawn1'];
 
+    console.log("length2: " + spawn.memory.miners.length);
+
+    console.log(spawn.memory.availableSources.length);
+    console.log(spawn.memory.miners.length);
+
     var energyContainers = spawn.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN);
@@ -36,6 +41,9 @@ module.exports.loop = function () {
     var miners = 0;
     var attackers = 0;
     var healers = 0;
+
+    console.log(spawn.memory.availableSources[0].id);
+    console.log(spawn.memory.availableSources[1].id);
 
     for(var i in Game.creeps){
         var creep = Game.creeps[i];
@@ -130,19 +138,19 @@ module.exports.loop = function () {
         console.log("Current Energy: " + currentEnergy);
         console.log("=======================");
     }
-    
-    
 
     if(currentEnergy == totalEnergy){
         if(miners < minMiners && spawn.energy == spawn.energyCapacity){
             var keys = Object.keys(spawn.memory.miners);
-            for(var key in keys){
-                if(!(Game.creeps[spawn.memory.miners[key]])){
-                    spawn.memory.availableSources.push(spawn.memory.miners[key].pop());
-                    console.log("replace dead miner's source");
+            if(keys.length > 0){
+                for(var key in keys){
+                    if(!(Game.creeps[spawn.memory.miners[key]])){
+                        spawn.memory.availableSources.push(spawn.memory.miners[key]);
+                        delete spawn.memory.miners[key];
+                        console.log("replace dead miner's source");
+                    }
                 }
             }
-
             spawn.spawnCreep(makeBody(totalEnergy, "miner"), "Miner" + Game.time, {memory: {role: "miner", source: spawn.memory.availableSources.pop()}});
             
             spawn.memory.miners["Miner" + Game.time] = Game.creeps["Miner" + Game.time].memory.source;
