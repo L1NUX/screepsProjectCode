@@ -72,7 +72,8 @@ module.exports.loop = function () {
         for(var i in Game.creeps) {
             var creep = Game.creeps[i];
             var role = creep.memory.role;
-            var sources = creep.room.find(FIND_DROPPED_ENERGY);
+
+            var droppedEnergy = creep.room.find(FIND_DROPPED_ENERGY);
 
             if(role == 'harvester' || role == 'builder' || role == 'upgrader'){
                 if(creep.carry[RESOURCE_ENERGY] > creep.carryCapacity) {
@@ -81,8 +82,8 @@ module.exports.loop = function () {
                         console.log('Returning to spawn...');
                     }
                 }else{
-                    if(creep.pickup(sources[0]) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                    if(creep.pickup(droppedEnergy[0]) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(droppedEnergy[0], {visualizePathStyle: {stroke: '#ffaa00'}});
                     }
                 }
             }
@@ -97,36 +98,38 @@ module.exports.loop = function () {
     var minHarvesters = minMiners * 4  * spawn.room.controller.level;
     var minHealers = Math.round(attackers / 3);
 
-    
+    var display = false;
 
     //--- Uncomment to enable information display every tick (useful for debugging) ---
+    display = true;
     
-    
-    console.log("=======================");
-    console.log("     *Information*");
-    console.log("+++++++++++");
-    console.log("Minimum Miners: " + minMiners);
-    console.log("Current Miners: " + miners);
-    console.log("-----------");
-    console.log("Minimum Harvesters: " + minHarvesters);
-    console.log("Current Harvesters: " + harvesters);
-    console.log("-----------");
-    console.log("Minimum Defenders: " + minDefenders);
-    console.log("Current Defenders: " + defenders);
-    console.log("-----------");
-    console.log("Minimum Upgraders: " + minUpgraders);
-    console.log("Current Upgraders: " + upgraders);
-    console.log("-----------");
-    console.log("Minimum Builders: " + minBuilders);
-    console.log("Current Builders: " + builders);
-    console.log("-----------");
-    console.log("Minimum Healers: " + minHealers);
-    console.log("Current Healers: " + healers);
-    console.log("+++++++++++");
-    console.log();
-    console.log("Max Energy: " + totalEnergy);
-    console.log("Current Energy: " + currentEnergy);
-    console.log("=======================");
+    if(display){
+        console.log("=======================");
+        console.log("     *Information*");
+        console.log("+++++++++++");
+        console.log("Minimum Miners: " + minMiners);
+        console.log("Current Miners: " + miners);
+        console.log("-----------");
+        console.log("Minimum Harvesters: " + minHarvesters);
+        console.log("Current Harvesters: " + harvesters);
+        console.log("-----------");
+        console.log("Minimum Defenders: " + minDefenders);
+        console.log("Current Defenders: " + defenders);
+        console.log("-----------");
+        console.log("Minimum Upgraders: " + minUpgraders);
+        console.log("Current Upgraders: " + upgraders);
+        console.log("-----------");
+        console.log("Minimum Builders: " + minBuilders);
+        console.log("Current Builders: " + builders);
+        console.log("-----------");
+        console.log("Minimum Healers: " + minHealers);
+        console.log("Current Healers: " + healers);
+        console.log("+++++++++++");
+        console.log();
+        console.log("Max Energy: " + totalEnergy);
+        console.log("Current Energy: " + currentEnergy);
+        console.log("=======================");
+    }
     
     
 
