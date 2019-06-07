@@ -90,18 +90,18 @@ module.exports.loop = function () {
         }
     }
 
-    var minBuilders = miners * 4 * spawn.room.controller.level;
-    var minDefenders = (spawn.room.find(FIND_MY_CREEPS).length - defenders) / 2;
-    var minUpgraders = miners * 3  * spawn.room.controller.level;
-    var minHarvesters = miners * 4  * spawn.room.controller.level;
     var minMiners = sources.length;
+    var minBuilders = minMiners * 4 * spawn.room.controller.level;
+    var minDefenders = (spawn.room.find(FIND_MY_CREEPS).length - defenders) / 2;
+    var minUpgraders = minMiners * 3  * spawn.room.controller.level;
+    var minHarvesters = minMiners * 4  * spawn.room.controller.level;
     var minHealers = Math.round(attackers / 3);
 
     
 
     //--- Uncomment to enable information display every tick (useful for debugging) ---
     
-    /*
+    
     console.log("=======================");
     console.log("     *Information*");
     console.log("+++++++++++");
@@ -127,7 +127,7 @@ module.exports.loop = function () {
     console.log("Max Energy: " + totalEnergy);
     console.log("Current Energy: " + currentEnergy);
     console.log("=======================");
-    */
+    
     
 
     if(currentEnergy == totalEnergy){
