@@ -50,7 +50,7 @@ module.exports.loop = function () {
         } else if(creep.memory.role == 'upgrader'){
             upgraders ++;
             roleUpgrader.run(creep);
-        }else if(creep.memory.role == 'miner'){
+        } else if(creep.memory.role == 'miner'){
             miners ++;
             roleMiner.run(creep);
             if(creep.ticksToLive == 1){
@@ -72,6 +72,15 @@ module.exports.loop = function () {
     if(miners == 0){
         for(var i = 0; i < sources.length; i ++){
             spawn.memory.availableSources[i] = sources[i];
+        }
+        for(var i in Game.creeps) {
+            var creep = Game.creeps[i];
+
+            if(creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(Game.spawns['Spawn1']);
+                console.log('Returning to spawn...');
+            }
+            
         }
         console.log("0 MINERS!");
     }
