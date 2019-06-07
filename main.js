@@ -134,53 +134,32 @@ module.exports.loop = function () {
         console.log("=======================");
     }
 
-    if(currentEnergy == totalEnergy) {
-        if(Game.spawns['Spawn1'].room.find(FIND_HOSTILE_CREEPS).length != 0) {
-            if(miners < minMiners && spawn.energy == spawn.energyCapacity) {
-                /*var keys = Object.keys(spawn.memory.miners);
-                if(keys.length > 0) {
-                    for(var key in keys) {
-                        if(!(Game.creeps[spawn.memory.miners[key]])) {
-                            spawn.memory.availableSources.push(spawn.memory.miners[key]);
-                            delete spawn.memory.miners[key];
-                            console.log("replace dead miner's source");
-                        }
-                    }
-                }*/
-                spawn.spawnCreep(makeBody(totalEnergy, "miner"), "Miner" + Game.time, {memory: {role: "miner", source: spawn.memory.availableSources.pop()}});
-                
-                //spawn.memory.miners["Miner" + Game.time] = Game.creeps["Miner" + Game.time].memory.source;
-            } else if(defenders < minDefenders) {
-                spawn.spawnCreep(makeBody(totalEnergy, "defender"), "Defender" + Game.time, {memory: {role: "defender", tIndex: Math.round(Math.random() + 1)}});
-            }
-        } else {
-            if(miners < minMiners && spawn.energy == spawn.energyCapacity) {
-                var keys = Object.keys(spawn.memory.miners);
-                if(keys.length > 0) {
-                    for(var key in keys) {
-                        if(!(Game.creeps[spawn.memory.miners[key]])) {
-                            spawn.memory.availableSources.push(spawn.memory.miners[key]);
-                            delete spawn.memory.miners[key];
-                            console.log("replace dead miner's source");
-                        }
+    if(currentEnergy == totalEnergy) {if(miners < minMiners && spawn.energy == spawn.energyCapacity) {
+            /*var keys = Object.keys(spawn.memory.miners);
+            if(keys.length > 0) {
+                for(var key in keys) {
+                    if(!(Game.creeps[spawn.memory.miners[key]])) {
+                        spawn.memory.availableSources.push(spawn.memory.miners[key]);
+                        delete spawn.memory.miners[key];
+                        console.log("replace dead miner's source");
                     }
                 }
-                spawn.spawnCreep(makeBody(totalEnergy, "miner"), "Miner" + Game.time, {memory: {role: "miner", source: spawn.memory.availableSources.pop()}});
-                
-                spawn.memory.miners["Miner" + Game.time] = Game.creeps["Miner" + Game.time].memory.source;
-            } else if(healers < minHealers && attackers > 0) {
-                spawn.spawnCreep(makeBody(totalEnergy, "healer"), "Healer" + Game.time, {memory: {role: "healer"}});
-            } else if(harvesters < minHarvesters) {
-                spawn.spawnCreep(makeBody(totalEnergy, "harvester"), "Harvester" + Game.time, {memory: {role: "harvester"}});
-            } else if(defenders < minDefenders) {
-                spawn.spawnCreep(makeBody(totalEnergy, "defender"), "Defender" + Game.time, {memory: {role: "defender", tIndex: Math.round(Math.random() + 1)}});
-            } else if(upgraders < minUpgraders) {
-                spawn.spawnCreep(makeBody(totalEnergy, "upgrader"), "Upgrader" + Game.time, {memory: {role: "upgrader"}});
-            } else if(builders < minBuilders) {
-                spawn.spawnCreep(makeBody(totalEnergy, "builder"), "Builder" + Game.time, {memory: {role: "builder"}});
-            } else if(healers < minHealers) {
-                spawn.spawnCreep(makeBody(totalEnergy, "healer"), "Healer" + Game.time, {memory: {role: "healer"}});
-            }
+            }*/
+            spawn.spawnCreep(makeBody(totalEnergy, "miner"), "Miner" + Game.time, {memory: {role: "miner", source: spawn.memory.availableSources.pop()}});
+            
+            //spawn.memory.miners["Miner" + Game.time] = Game.creeps["Miner" + Game.time].memory.source;
+        } else if(healers < minHealers && attackers > 0) {
+            spawn.spawnCreep(makeBody(totalEnergy, "healer"), "Healer" + Game.time, {memory: {role: "healer"}});
+        } else if(harvesters < minHarvesters) {
+            spawn.spawnCreep(makeBody(totalEnergy, "harvester"), "Harvester" + Game.time, {memory: {role: "harvester"}});
+        } else if(defenders < minDefenders) {
+            spawn.spawnCreep(makeBody(totalEnergy, "defender"), "Defender" + Game.time, {memory: {role: "defender", tIndex: Math.round(Math.random() + 1)}});
+        } else if(upgraders < minUpgraders) {
+            spawn.spawnCreep(makeBody(totalEnergy, "upgrader"), "Upgrader" + Game.time, {memory: {role: "upgrader"}});
+        } else if(builders < minBuilders) {
+            spawn.spawnCreep(makeBody(totalEnergy, "builder"), "Builder" + Game.time, {memory: {role: "builder"}});
+        } else if(healers < minHealers) {
+            spawn.spawnCreep(makeBody(totalEnergy, "healer"), "Healer" + Game.time, {memory: {role: "healer"}});
         }
     }
 }
