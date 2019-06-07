@@ -104,7 +104,7 @@ function makeBody(energy, type){
     var heal = 0;
 
     if(type == "builder" || type == "upgrader"){
-        for(var i = 0; i < energy; i += 50){
+        while(energy - usedEnergy >= 50) {
             if(work <= move && move == carry && (energy - usedEnergy) >= 100){
                 body.push(WORK);
                 work ++;
@@ -123,7 +123,8 @@ function makeBody(energy, type){
         body.push(MOVE);
         move ++;
         usedEnergy += 50;
-        for(var i = 0; i < energy - usedEnergy; i += 100){
+        
+        while(energy - usedEnergy >= 100) {
             if(work < 5){
                 body.push(WORK);
                 work ++;
@@ -131,7 +132,7 @@ function makeBody(energy, type){
             }
         }
     }else if(type == "defender"){
-        for(var i = 0; i < energy; i += 50){
+        while(energy - usedEnergy >= 50) {
             if(move < (attack / 2) && (energy - usedEnergy) >= 50){
                 body.push(MOVE);
                 move ++;
@@ -144,24 +145,24 @@ function makeBody(energy, type){
         }
     }
     else if(type == "harvester"){
-        for(var i = 0; i < energy; i += 50){
-            if(carry <= move && (energy - usedEnergy) >= 50){
+        while(energy - usedEnergy >= 50) {
+            if(carry <= move){
                 body.push(CARRY);
                 carry ++;
                 usedEnergy += 50;
-            }else if((energy - usedEnergy) >= 50){
+            }else {
                 body.push(MOVE);
                 move ++;
                 usedEnergy += 50;
             }
         }
     } else if(type == "healer") {
-        for(var i = 0; i < energy; i += 50) {
-            if(move <= heal && availableEnergy >= 50) {
+        while(energy - usedEnergy >= 50) {
+            if(move <= heal) {
                 body.push(MOVE);
                 move ++;
                 usedEnergy += 50;
-            } else if(availableEnergy >= 250) {
+            } else if(energy - usedEnergy >= 250) {
                 body.push(HEAL);
                 heal ++;
                 usedEnergy += 250;
