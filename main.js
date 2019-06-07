@@ -104,7 +104,7 @@ module.exports.loop = function () {
     var display = false;
 
     //--- Uncomment to enable information display every tick (useful for debugging) ---
-    display = true;
+    //display = true;
     
     if(display) {
         console.log("=======================");
