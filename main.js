@@ -75,10 +75,13 @@ module.exports.loop = function () {
         }
         for(var i in Game.creeps) {
             var creep = Game.creeps[i];
+            var role = creep.memory.role;
 
-            if(creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(Game.spawns['Spawn1']);
-                console.log('Returning to spawn...');
+            if(role == 'harvester' || role == 'builder' || role == 'upgrader') {
+                if(creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(Game.spawns['Spawn1']);
+                    console.log('Returning to spawn...');
+                }
             }
             
         }
