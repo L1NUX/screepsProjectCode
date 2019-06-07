@@ -5,18 +5,14 @@ var roleUpgrader = {
 
         if(creep.memory.upgrading && creep.carry[RESOURCE_ENERGY] == 0) {
             creep.memory.upgrading = false;
-            creep.say('-- harvest --');
 	    }
 	    if(!creep.memory.upgrading && creep.carry[RESOURCE_ENERGY] == creep.carryCapacity) {
 	        creep.memory.upgrading = true;
-	        creep.say('-- upgrade --');
 	    }
 
 	    if(creep.memory.upgrading) {
-            console.log("upgrading");
             if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
-                console.log("upgrading2");
             }
         }
         else {

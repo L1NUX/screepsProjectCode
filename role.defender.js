@@ -13,7 +13,8 @@ var roleDefender = {
                 creep.moveTo(targets2[0], {visualizePathStyle: {stroke: '#1000ff'}});
             }
         } else{
-            creep.moveTo(creep.room.find(FIND_MY_SPAWNS)[0].pos.x, creep.room.find(FIND_MY_SPAWNS)[0].pos.y + 5);
+            //creep.moveTo(creep.room.find(FIND_MY_SPAWNS)[0].pos.x, creep.room.find(FIND_MY_SPAWNS)[0].pos.y + 5);
+            creep.moveTo(8, 47);
         }
     }
 };
