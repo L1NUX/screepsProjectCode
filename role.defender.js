@@ -1,7 +1,7 @@
 var roleDefender = {
     /** @param {Creep} creep */
     run: function(creep){
-        var targets1 = spawn.room.find(FIND_HOSTILE_CREEPS); // total hostiles in room
+        var targets1 = creep.room.find(FIND_HOSTILE_CREEPS); // total hostiles in room
         var targets2 = targets1.splice(0, Math.floor(targets1.length / 2)); // removes half of hostiles in targets1 and puts them in targets2
 
         if(targets1 && creep.memory.tIndex == 1){
