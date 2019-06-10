@@ -2,7 +2,6 @@ var roleDefender = {
     /** @param {Creep} creep */
     run: function(creep){
         var targets1 = creep.room.find(FIND_HOSTILE_CREEPS); // total hostiles in room
-        console.log(creep.room.find(FIND_HOSTILE_CREEPS).length);
         if(targets1.length > 1){
             var targets2 = targets1.splice(0, Math.floor(targets1.length / 2)); // removes half of hostiles in targets1 and puts them in targets2
 
@@ -19,7 +18,14 @@ var roleDefender = {
                 creep.moveTo(8, 29);
             }
         }else{
-            creep.moveTo(8, 29);
+            if(targets1.length > 0){
+                if(creep.attack(targets1[0]) == ERR_NOT_IN_RANGE){
+                    creep.moveTo(targets1[0], {visualizePathStyle: {stroke: '#1000ff'}});
+                }
+            }else{
+                creep.moveTo(8, 29);
+            }
+            
         }
     }
 };

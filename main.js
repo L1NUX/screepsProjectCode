@@ -43,7 +43,7 @@ module.exports.loop = function () {
         if(creep.memory.role == 'miner') {
             miners ++;
             roleMiner.run(creep);
-            if(creep.ticksToLive == 1){
+            if(creep.ticksToLive <= 5){
                 spawn.memory.availableSources.push(creep.memory.source);
             }
         } if(creep.memory.role == 'builder'){
