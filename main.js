@@ -19,6 +19,8 @@ module.exports.loop = function () {
     var currentEnergy = 0;
 
     var sources = spawn.room.find(FIND_SOURCES);
+    
+    console.log(spawn.memory.availableSources.length);
 
     var container;
 
@@ -38,6 +40,8 @@ module.exports.loop = function () {
     var healers = 0;
     var attackers = 0;
 
+    console.log(spawn.memory.availableSources.length);
+
     // counting of currently spawned creeps
     for(var i in Game.creeps) {
         var creep = Game.creeps[i];
@@ -48,6 +52,7 @@ module.exports.loop = function () {
             roleMiner.run(creep);
             if(creep.ticksToLive <= 5){
                 spawn.memory.availableSources.push(creep.memory.source);
+                delete creep.memory.source;
             }
         } if(role == 'builder'){
             builders ++;
@@ -116,7 +121,7 @@ module.exports.loop = function () {
     }*/
     
     //--- Uncomment to enable information display every tick (useful for debugging) ---
-    //display = true;
+    display = true;
     
     if(display) {
         console.log("=======================");
