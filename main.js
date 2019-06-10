@@ -38,7 +38,8 @@ module.exports.loop = function () {
     var healers = 0;
     var attackers = 0;
 
-    for(var i in Game.creeps){
+    // counting of currently spawned creeps
+    for(var i in Game.creeps) {
         var creep = Game.creeps[i];
         var role = creep.memory.role;
         
@@ -69,13 +70,14 @@ module.exports.loop = function () {
         }
     }
 
+    // put all sources back into available sources when no miners exist
     if(miners == 0) {
         for(var i = 0; i < sources.length; i ++) {
             spawn.memory.availableSources[i] = sources[i];
         }
         
-        console.log("0 MINERS!");
-    } else if(miners < 2) {
+        console.log("0 MINERS!"); // debugging
+    } else if(miners < 2) { // help get game started faster by having other creeps pick up and return energy
         for(var i in Game.creeps) {
             var creep = Game.creeps[i];
             var role = creep.memory.role;
@@ -108,8 +110,11 @@ module.exports.loop = function () {
 
     var display = false;
 
-    //totalEnergy = 300;
-
+    // Uncomment to fix bug where harvesters don't spawn unless energy is 300
+    /*if(harvesters == 0) {
+        totalEnergy = 300;
+    }*/
+    
     //--- Uncomment to enable information display every tick (useful for debugging) ---
     //display = true;
     
