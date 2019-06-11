@@ -1,7 +1,7 @@
 var roleAttacker = {
     /** @param {Creep} creep */
     run: function(creep){
-        var targetRoom = "W8N7";
+        var targetRoom = "W8N3";
         var targets = creep.room.find(FIND_HOSTILE_CREEPS);
 
         if(creep.room.name != targetRoom) {

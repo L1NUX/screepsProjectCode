@@ -19,8 +19,6 @@ module.exports.loop = function () {
     var currentEnergy = 0;
 
     var sources = spawn.room.find(FIND_SOURCES);
-    
-    console.log(spawn.memory.availableSources.length);
 
     var container;
 
@@ -40,8 +38,6 @@ module.exports.loop = function () {
     var healers = 0;
     var attackers = 0;
 
-    console.log(spawn.memory.availableSources.length);
-
     // counting of currently spawned creeps
     for(var i in Game.creeps) {
         var creep = Game.creeps[i];
@@ -50,11 +46,11 @@ module.exports.loop = function () {
         if(role == 'miner') {
             miners ++;
             roleMiner.run(creep);
-            if(creep.ticksToLive <= 5){
+            if(creep.ticksToLive <= 5 && !creep.memory.dead){
                 spawn.memory.availableSources.push(creep.memory.source);
-                delete creep.memory.source;
+                creep.memory.dead = true;
             }
-        } if(role == 'builder'){
+        } else if(role == 'builder'){
             builders ++;
             roleBuilder.run(creep);
         } else if(role == 'defender') {
@@ -77,9 +73,7 @@ module.exports.loop = function () {
 
     // put all sources back into available sources when no miners exist
     if(miners == 0) {
-        for(var i = 0; i < sources.length; i ++) {
-            spawn.memory.availableSources[i] = sources[i];
-        }
+        spawn.memory.availableSources = sources;
         
         console.log("0 MINERS!"); // debugging
     } else if(miners < 2) { // help get game started faster by having other creeps pick up and return energy
@@ -144,6 +138,9 @@ module.exports.loop = function () {
         console.log("-----------");
         console.log("Minimum Healers: " + minHealers);
         console.log("Current Healers: " + healers);
+        console.log("-----------");
+        console.log("Minimum Attackers: " + minAttackers);
+        console.log("Current Attackers: " + attackers);
         console.log("+++++++++++");
         console.log();
         console.log("Max Energy: " + totalEnergy);
@@ -151,7 +148,7 @@ module.exports.loop = function () {
         console.log("=======================");
     }
 
-    if(currentEnergy == totalEnergy) {
+    if(currentEnergy >= totalEnergy) {
         if(miners < minMiners && spawn.energy == spawn.energyCapacity) {
             /*var keys = Object.keys(spawn.memory.miners);
             if(keys.length > 0) {
