@@ -9,16 +9,20 @@ var roleAttacker = require('role.attacker');
 module.exports.loop = function () {
     var spawn = Game.spawns['Spawn1'];
 
+
     var energyContainers = spawn.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
             return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN);
         }
     });
 
+
     var totalEnergy = 0;
     var currentEnergy = 0;
 
+
     var sources = spawn.room.find(FIND_SOURCES);
+
 
     var container;
 
@@ -30,6 +34,12 @@ module.exports.loop = function () {
         currentEnergy += container.energy;
     }
 
+
+    for(var i = 0; i < spawn.room.find(FIND_MY_CREEPS).length; i ++){
+        
+    }
+
+
     var builders = 0;
     var defenders = 0;
     var upgraders = 0;
@@ -38,18 +48,20 @@ module.exports.loop = function () {
     var healers = 0;
     var attackers = 0;
 
+
     // counting of currently spawned creeps
     for(var i in Game.creeps) {
         var creep = Game.creeps[i];
         var role = creep.memory.role;
         
         if(role == 'miner') {
+            if(creep.ticksToLive <= 5){
+                spawn.memory.availableSources.push(creep.memory.source);
+                creep.suicide();
+            }
+
             miners ++;
             roleMiner.run(creep);
-            if(creep.ticksToLive <= 5 && !creep.memory.dead){
-                spawn.memory.availableSources.push(creep.memory.source);
-                creep.memory.dead = true;
-            }
         } else if(role == 'builder'){
             builders ++;
             roleBuilder.run(creep);
@@ -69,6 +81,15 @@ module.exports.loop = function () {
             attackers++;
             roleAttacker.run(creep);
         }
+    }
+
+    for(var tower in spawn.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType == STRUCTURE_TOWER);
+            }
+        }))
+    {
+        tower.heal();
     }
 
     // put all sources back into available sources when no miners exist
@@ -115,7 +136,7 @@ module.exports.loop = function () {
     }*/
     
     //--- Uncomment to enable information display every tick (useful for debugging) ---
-    display = true;
+    //display = true;
     
     if(display) {
         console.log("=======================");
