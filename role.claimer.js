@@ -7,7 +7,7 @@ var roleClaimer = {
                 return (structure.structureType == STRUCTURE_CONTROLLER);
             }
         });
-        
+        //HELLO OILVER
         if(creep.room.name != targetRoom) {
             creep.moveTo(creep.pos.findClosestByRange(creep.room.findExitTo(targetRoom)), {visualizePathStyle: {stroke: '#ff00c7'}});
         } else if(creep.claimController(controllers[0]) == ERR_NOT_IN_RANGE) {
