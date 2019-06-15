@@ -5,10 +5,18 @@ var roleDefender = require('role.defender');
 var roleMiner = require('role.miner');
 var roleHealer = require('role.healer');
 var roleAttacker = require('role.attacker');
+var roleClaimer = require('role.claimer');
 
 module.exports.loop = function () {
     var spawn = Game.spawns['Spawn1'];
-
+    
+    if(Game.time % 1500 == 0){
+        for(var i in Memory.creeps){
+            if(!Game.creeps[i]){
+                delete Memory.creeps[i];
+            }
+        }
+    }
 
     var energyContainers = spawn.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
@@ -47,7 +55,7 @@ module.exports.loop = function () {
     var miners = 0;
     var healers = 0;
     var attackers = 0;
-
+    var claimers = 0;
 
     // counting of currently spawned creeps
     for(var i in Game.creeps) {
@@ -55,14 +63,18 @@ module.exports.loop = function () {
         var role = creep.memory.role;
         
         if(role == 'miner') {
-            if(creep.ticksToLive <= 5){
+            if(creep.ticksToLive <= 30){
                 spawn.memory.availableSources.push(creep.memory.source);
                 creep.suicide();
-            }
+                console.log("MINER ABOUT TO DIE");
+            }/*else if(Game.time % 3000 == 0){
+                spawn.memory.availableSources = sources;
+                creep.suicide();
+            }*/
 
             miners ++;
             roleMiner.run(creep);
-        } else if(role == 'builder'){
+        }else if(role == 'builder'){
             builders ++;
             roleBuilder.run(creep);
         } else if(role == 'defender') {
@@ -80,7 +92,28 @@ module.exports.loop = function () {
         } else if(role == 'attacker') {
             attackers++;
             roleAttacker.run(creep);
+        } else if(role == 'claimer'){
+            claimers ++;
+            roleClaimer.run(creep);
         }
+            /*else{
+            var targets = creep.room.find(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType == STRUCTURE_EXTENSION ||
+                                structure.structureType == STRUCTURE_SPAWN ||
+                                structure.structureType == STRUCTURE_TOWER
+                                ) && ((_.sum(structure.store) < structure.storeCapacity) || (structure.energy < structure.energyCapacity));
+                    }
+            });
+            
+            if(targets.length > 0) {
+                if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                }
+            }
+            
+            roleHarvester.run(creep);
+        }*/
     }
 
     for(var tower in spawn.room.find(FIND_STRUCTURES, {
@@ -97,38 +130,29 @@ module.exports.loop = function () {
         spawn.memory.availableSources = sources;
         
         console.log("0 MINERS!"); // debugging
-    } else if(miners < 2) { // help get game started faster by having other creeps pick up and return energy
-        for(var i in Game.creeps) {
-            var creep = Game.creeps[i];
-            var role = creep.memory.role;
-
-            var droppedEnergy = creep.room.find(FIND_DROPPED_RESOURCES);
-
-            if(role == 'harvester' || role == 'builder' || role == 'upgrader') {
-                if(creep.carry[RESOURCE_ENERGY] > creep.carryCapacity) {
-                    if(creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(Game.spawns['Spawn1']);
-                        console.log('Returning to spawn...');
-                    }
-                } else {
-                    if(creep.pickup(droppedEnergy[0]) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(droppedEnergy[0], {visualizePathStyle: {stroke: '#ffaa00'}});
-                    }
-                }
-            }
-            
-        }
+        totalEnergy = 300;
     }
+    
+    //var spawnAmount = 2;
+    var spawnAmount = spawn.room.controller.level;
 
     var minMiners = sources.length;
-    var minBuilders = minMiners * 4 * (spawn.room.controller.level / 1.5);
-    var minDefenders = (spawn.room.find(FIND_MY_CREEPS).length - defenders) / 2;
-    var minUpgraders = minMiners * 3  * (spawn.room.controller.level / 1.5);
-    var minHarvesters = minMiners * 4  * (spawn.room.controller.level / 1.5);
+    var minBuilders = minMiners * 4 * (spawnAmount / 2);
+    var minDefenders = (spawn.room.find(FIND_MY_CREEPS).length - defenders - miners) / 2;
+    var minUpgraders = minMiners * 3 * (spawnAmount / 2);
+    var minHarvesters = minMiners * 4  * (spawnAmount / 2);
     var minHealers = Math.round(attackers / 2);
     var minAttackers = 5; // change this to some other thing like minDefenders
+    var minClaimers = 1;
 
     var display = false;
+    
+    if(attackers == minAttackers){
+        console.log("MAXED OUT!");
+        
+        minDefenders *= 2;
+        minUpgraders *= 2;
+    }
 
     // Uncomment to fix bug where harvesters don't spawn unless energy is 300
     /*if(harvesters == 0) {
@@ -138,39 +162,46 @@ module.exports.loop = function () {
     //--- Uncomment to enable information display every tick (useful for debugging) ---
     //display = true;
     
-    if(display) {
+    if(display && Game.time % 300) {
         console.log("=======================");
         console.log("     *Information*");
         console.log("+++++++++++");
         console.log("Minimum Miners: " + minMiners);
         console.log("Current Miners: " + miners);
         console.log("-----------");
-        console.log("Minimum Harvesters: " + minHarvesters);
-        console.log("Current Harvesters: " + harvesters);
-        console.log("-----------");
         console.log("Minimum Defenders: " + minDefenders);
         console.log("Current Defenders: " + defenders);
         console.log("-----------");
-        console.log("Minimum Upgraders: " + minUpgraders);
-        console.log("Current Upgraders: " + upgraders);
+        console.log("Minimum Harvesters: " + minHarvesters);
+        console.log("Current Harvesters: " + harvesters);
         console.log("-----------");
         console.log("Minimum Builders: " + minBuilders);
         console.log("Current Builders: " + builders);
+        console.log("-----------");
+        console.log("Minimum Upgraders: " + minUpgraders);
+        console.log("Current Upgraders: " + upgraders);
         console.log("-----------");
         console.log("Minimum Healers: " + minHealers);
         console.log("Current Healers: " + healers);
         console.log("-----------");
         console.log("Minimum Attackers: " + minAttackers);
         console.log("Current Attackers: " + attackers);
+        console.log("-----------");
+        console.log("Minimum Claimers: " + minClaimers);
+        console.log("Current Claimers: " + claimers);
         console.log("+++++++++++");
         console.log();
         console.log("Max Energy: " + totalEnergy);
         console.log("Current Energy: " + currentEnergy);
         console.log("=======================");
     }
-
+    
+    if(harvesters == 0){
+        totalEnergy = 300;
+    }
+    
     if(currentEnergy >= totalEnergy) {
-        if(miners < minMiners && spawn.energy == spawn.energyCapacity) {
+        if(miners < minMiners) {
             /*var keys = Object.keys(spawn.memory.miners);
             if(keys.length > 0) {
                 for(var key in keys) {
@@ -184,21 +215,23 @@ module.exports.loop = function () {
             spawn.spawnCreep(makeBody(totalEnergy, "miner"), "Miner" + Game.time, {memory: {role: "miner", source: spawn.memory.availableSources.pop()}});
             
             //spawn.memory.miners["Miner" + Game.time] = Game.creeps["Miner" + Game.time].memory.source;
-        } else if(healers < minHealers && attackers > 0) {
-            spawn.spawnCreep(makeBody(totalEnergy, "healer"), "Healer" + Game.time, {memory: {role: "healer"}});
-        } else if(harvesters < minHarvesters) {
-            spawn.spawnCreep(makeBody(totalEnergy, "harvester"), "Harvester" + Game.time, {memory: {role: "harvester"}});
-        } else if(defenders < minDefenders) {
+        }else if(defenders < minDefenders) {
             spawn.spawnCreep(makeBody(totalEnergy, "defender"), "Defender" + Game.time, {memory: {role: "defender", tIndex: Math.round(Math.random() + 1)}});
-        } else if(upgraders < minUpgraders) {
-            spawn.spawnCreep(makeBody(totalEnergy, "upgrader"), "Upgrader" + Game.time, {memory: {role: "upgrader"}});
-        } else if(builders < minBuilders) {
-            spawn.spawnCreep(makeBody(totalEnergy, "builder"), "Builder" + Game.time, {memory: {role: "builder"}});
-        } else if(healers < minHealers) {
+        }else if(healers < minHealers && attackers > 0) {
             spawn.spawnCreep(makeBody(totalEnergy, "healer"), "Healer" + Game.time, {memory: {role: "healer"}});
-        } else if(attackers < minAttackers) {
+        }else if(harvesters < minHarvesters) {
+            spawn.spawnCreep(makeBody(totalEnergy, "harvester"), "Harvester" + Game.time, {memory: {role: "harvester"}});
+        }else if(builders < minBuilders) {
+            spawn.spawnCreep(makeBody(totalEnergy, "builder"), "Builder" + Game.time, {memory: {role: "builder"}});
+        }else if(upgraders < minUpgraders) {
+            spawn.spawnCreep(makeBody(totalEnergy, "upgrader"), "Upgrader" + Game.time, {memory: {role: "upgrader"}});
+        }else if(healers < minHealers) {
+            spawn.spawnCreep(makeBody(totalEnergy, "healer"), "Healer" + Game.time, {memory: {role: "healer"}});
+        }else if(attackers < minAttackers) {
             spawn.spawnCreep(makeBody(totalEnergy, "attacker"), "Attacker" + Game.time, {memory: {role: "attacker"}});
-        }
+        }/*else if(claimers < minClaimers){
+            spawn.spawnCreep(makeBody(totalEnergy, "claimer"), "Attacker" + Game.time, {memory: {role: "attacker"}});
+        }*/
     }
 }
 
@@ -213,6 +246,7 @@ function makeBody(energy, type) {
     var carry = 0;
     var attack = 0;
     var heal = 0;
+    var claim = 0;
 
     if(type == "builder" || type == "upgrader") {
         while(energy - usedEnergy >= 50) {
@@ -220,14 +254,16 @@ function makeBody(energy, type) {
                 body.push(WORK);
                 work ++;
                 usedEnergy += 100;
-            } else if(move <= carry && (energy - usedEnergy) >= 50) {
+            }else if(move <= carry && (energy - usedEnergy) >= 50) {
                 body.push(MOVE);
                 move ++;
                 usedEnergy += 50;
-            } else if((energy - usedEnergy) >= 50) {
+            }else if((energy - usedEnergy) >= 50) {
                 body.push(CARRY);
                 carry ++;
                 usedEnergy += 50;
+            }else{
+                break;
             }
         }
     } else if(type == "miner") {
@@ -240,6 +276,8 @@ function makeBody(energy, type) {
                 body.push(WORK);
                 work ++;
                 usedEnergy += 100;
+            }else{
+                break;
             }
         }
     } else if(type == "defender") {
@@ -248,10 +286,15 @@ function makeBody(energy, type) {
                 body.push(MOVE);
                 move ++;
                 usedEnergy += 50;
-            } else if((energy - usedEnergy) >= 80) {
+            }else if((energy - usedEnergy) >= 80) {
                 body.push(ATTACK);
                 attack ++;
                 usedEnergy += 80;
+            }else if ((energy - usedEnergy) >= 10){
+                body.push(HEAL);
+                usedEnergy += 10;
+            }else{
+                break;
             }
         }
     } else if(type == "harvester") {
@@ -260,7 +303,7 @@ function makeBody(energy, type) {
                 body.push(CARRY);
                 carry ++;
                 usedEnergy += 50;
-            } else {
+            }else {
                 body.push(MOVE);
                 move ++;
                 usedEnergy += 50;
@@ -272,10 +315,12 @@ function makeBody(energy, type) {
                 body.push(MOVE);
                 move ++;
                 usedEnergy += 50;
-            } else if(energy - usedEnergy >= 250) {
+            }else if(energy - usedEnergy >= 250) {
                 body.push(HEAL);
                 heal ++;
                 usedEnergy += 250;
+            }else{
+                break;
             }
         }
     } else if(type == "attacker") {
@@ -288,9 +333,26 @@ function makeBody(energy, type) {
                 body.push(ATTACK);
                 attack ++;
                 usedEnergy += 80;
+            }else if ((energy - usedEnergy) >= 10){
+                body.push(HEAL);
+                usedEnergy += 10;
+            }else{
+                break;
             }
         }
-    }
+    }/*else if(type == "claimer"){
+        while(energy - usedEnergy >= 50){
+            if(claim < move && (energy - usedEnergy) >= 600){
+                body.push(CLAIM);
+                claim ++;
+                usedEnergy += 600;
+            }else if((energy - usedEnergy) >= 50){
+                body.push(MOVE);
+                move ++;
+                usedEnergy += 50;
+            }
+        }
+    }*/
 
     return body;
 }

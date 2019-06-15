@@ -23,7 +23,7 @@ var roleDefender = {
                     creep.moveTo(targets1[0], {visualizePathStyle: {stroke: '#1000ff'}});
                 }
             }else{
-                creep.moveTo(8, 29);
+                creep.moveTo(Game.flags["Defenders"]);
             }
             
         }

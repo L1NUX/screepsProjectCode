@@ -12,6 +12,8 @@ var roleHealer = {
                 }
             }
         }
+        
+        creep.moveTo(Game.flags["Healers"]);
     }
 };
 
