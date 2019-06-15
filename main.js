@@ -144,7 +144,7 @@ module.exports.loop = function () {
     var minHealers = Math.round(attackers / 2);
     var minAttackers = 5; // change this to some other thing like minDefenders
     var minClaimers = 1;
-
+    
     var display = false;
     
     if(attackers == minAttackers){
@@ -282,7 +282,7 @@ function makeBody(energy, type) {
         }
     } else if(type == "defender") {
         while(energy - usedEnergy >= 50) {
-            if(move < (attack / 2)) {
+            if(move < (attack / 2) && (energy - usedEnergy) >= 50) {
                 body.push(MOVE);
                 move ++;
                 usedEnergy += 50;
@@ -296,6 +296,7 @@ function makeBody(energy, type) {
             }else{
                 break;
             }
+            console.log("1");
         }
     } else if(type == "harvester") {
         while(energy - usedEnergy >= 50) {
